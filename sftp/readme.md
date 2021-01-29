@@ -21,6 +21,52 @@ Adicione a seguinte linha ao final do arquivo:
 
 Salve a inclusão, no nano `ctrl x` **→** `y` (yes para confirmar a edição) **→** `enter`
 
+## (Opcional) SSH Porta 22 - Alterar
+Como a porta 22 é uma porta padrão para acesso, esta sofre bastante ataque, antes de criarmos contas e acesso recomendo esta alteração. Caso não queira, pode prosseguir diretamente para **Criando o SFTP Grupo**.
+
+`nano /etc/ssh/sshd_config`
+
+Localize:
+```
+# If you want to change the port on a SELinux system, you have to tell
+# SELinux about this change.
+# semanage port -a -t ssh_port_t -p tcp #PORTNUMBER
+#
+#Port 22
+```
+Altere `#Port 22` para uma outra porta qualquer, aqui no nosso exemplo vou colocar a `Port 8123`
+```
+# If you want to change the port on a SELinux system, you have to tell
+# SELinux about this change.
+# semanage port -a -t ssh_port_t -p tcp #PORTNUMBER
+#
+Port 8123
+```
+Salve a inclusão, no nano `ctrl x` **→** `y` (yes para confirmar a edição) **→** `enter`
+
+Reinicie o ssh, `# systemctl restart sshd`
+
+Agora vamos liberar esta porta no Firewall, `nano /etc/csf/csf.conf`
+
+Localize:
+```
+# Allow incoming TCP ports
+TCP_IN = "20,21,22,25,53,80,110,143,443,465,587,993,995,2030,2031,2082,2083,2086,2087,2095,2096"
+
+# Allow outgoing TCP ports
+TCP_OUT = "20,21,22,25,53,80,110,113,443,2030,2031,2082,2083,2086,2087,2095,2096,587,993,995,2080,2443"
+```
+Adicione a nova porta:
+```
+# Allow incoming TCP ports
+TCP_IN = "8123,20,21,22,25,53,80,110,143,443,465,587,993,995,2030,2031,2082,2083,2086,2087,2095,2096"
+
+# Allow outgoing TCP ports
+TCP_OUT = "8123,20,21,22,25,53,80,110,113,443,2030,2031,2082,2083,2086,2087,2095,2096,587,993,995,2080,2443"
+```
+Salve a inclusão, no nano `ctrl x` **→** `y` (yes para confirmar a edição) **→** `enter`
+
+Reinicie o firewall, `systemctl start firewalld`
 
 
 ## Criando o SFTP Grupo
