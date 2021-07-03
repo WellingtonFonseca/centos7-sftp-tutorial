@@ -146,5 +146,3 @@ outros usuários. Claro, se você criar um sftp para diversos usuários diferent
 $ chown novousername:sftponly /home/novousername$
 $ chmod 700 /home/novousername
 ```
-
-É basicamente isso. Caso tenha alguma dúvida, pode questionar, se eu souber com toda certeza vou ajudar.
